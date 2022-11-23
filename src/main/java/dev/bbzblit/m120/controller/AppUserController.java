@@ -24,9 +24,9 @@ public class AppUserController {
 	@Autowired
 	AppUserService appUserService;
 	
-	@PostMapping("/api/appuser")
+	@PostMapping("/api/appuser/register") 
 	public ResponseEntity<AppUser> register(@RequestBody @Valid AppUser appUser){
-		return ResponseEntity.ok(this.appUserService.storeAppUser(appUser));
+		return ResponseEntity.ok(this.appUserService.saveAppUser(appUser));
 	}
 	
 	@GetMapping("/api/appuser")
