@@ -14,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.google.common.hash.Hashing;
 
 import dev.bbzblit.m120.models.AppUser;
+import dev.bbzblit.m120.models.LoginModel;
 import dev.bbzblit.m120.repository.AppUserRepository;
 
 @Service
@@ -73,6 +74,31 @@ public class AppUserService {
 		}
 		
 		return this.appUserRepository.save(appUser);
+	}
+	
+	public AppUser findByEmailOrUsername(LoginModel loginModel) {
+		
+		loginModel.setPassword(Hashing.sha256()
+				  .hashString(loginModel.getPassword() + salt, StandardCharsets.UTF_8)
+				  .toString());
+		
+		Optional<AppUser> optionalAppUser = this.appUserRepository.getByUsername(loginModel.getPassword(), loginModel.getUserNameOrEmail());
+		
+		if(optionalAppUser.isEmpty()) {
+			optionalAppUser = this.appUserRepository.getByEmail(loginModel.getPassword(), loginModel.getUserNameOrEmail());
+		}
+		
+		if(optionalAppUser.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong Username/Email or Password");
+		}
+		
+		AppUser appUser = optionalAppUser.get();
+		
+		if(!appUser.getEmailVerified()) {
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You first have to verifiy your email befor login");
+		}
+		
+		return appUser;
 	}
 	
 }
