@@ -12,12 +12,12 @@ import lombok.Data;
 public class Session {
 	
 	@Id
-	String id;
+	private String id;
 	
-	String sessionId;
+	private String sessionId;
 
-	AppUser logedInAppUser;
+	private AppUser logedInAppUser;
 	
-	Long expires;
+	private Long expires;
 	
 }

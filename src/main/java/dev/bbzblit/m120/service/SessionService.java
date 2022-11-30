@@ -88,5 +88,10 @@ public class SessionService {
 	    
 	    return hash;
 	}
+
+	public void logout(String sessionid) {
+		AppUser appUser = this.isLogedIn(sessionid);
+		this.deleteOldSession(appUser);
+	}
 	
 }

@@ -2,6 +2,8 @@ package dev.bbzblit.m120.models;
 
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Data;
@@ -9,13 +11,21 @@ import lombok.Data;
 @Document
 @Data
 public class Folder {
-
-	List<Subject> subjects;
 	
-	AppUser owner;
+	@Id
+	private String id;
 	
-	List<AppUser> viewAccess;
+	private String title;
 	
-	List<AppUser> writeAccess;
+	private List<Subject> subjects;
+	
+	@DBRef
+	private AppUser owner; //Ref to AppUser
+	
+	@DBRef
+	private List<AppUser> viewAccess; //Ref to AppUser
+	
+	@DBRef
+	private List<AppUser> writeAccess; //Ref to AppUser
 	
 }

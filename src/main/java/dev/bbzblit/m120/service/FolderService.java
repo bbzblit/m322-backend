@@ -1,12 +1,18 @@
 package dev.bbzblit.m120.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.CriteriaDefinition;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import dev.bbzblit.m120.models.AppUser;
 import dev.bbzblit.m120.models.Folder;
 import dev.bbzblit.m120.repository.FolderRepository;
 
@@ -15,6 +21,9 @@ public class FolderService {
 
 	@Autowired
 	FolderRepository folderRepository;
+	
+	@Autowired
+	MongoTemplate mongoTemplate;
 	
 	public Folder saveFolder(Folder folder) {
 		
@@ -57,6 +66,12 @@ public class FolderService {
 		}
 		
 		return this.folderRepository.save(folder);
+	}
+
+	public List<Folder> getFolderByAppUser(AppUser appUser) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("owner").is(appUser.getId()));
+		return this.mongoTemplate.find(query, Folder.class);
 	}
 	
 }

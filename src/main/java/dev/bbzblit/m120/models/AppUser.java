@@ -16,20 +16,20 @@ import lombok.Data;
 @Document
 public class AppUser {
 
-	String id;
+	private String id;
 
-	String firstName;
+	private String firstName;
 	
-	String lastName;
+	private String lastName;
 	
-	String userName;
+	private String userName;
 	
 	@JsonIgnore
-	Boolean emailVerified; 
+	private Boolean emailVerified; 
 	
 	@JsonIgnore
-	String password; //Sha-256
+	private String password; //Sha-256
 
-	String email;
+	private String email;
 	
 }

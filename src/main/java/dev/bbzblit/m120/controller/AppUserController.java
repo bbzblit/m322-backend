@@ -55,6 +55,15 @@ public class AppUserController {
 		return ResponseEntity.ok(this.sessionService.isLogedIn(sessionid));
 	}
 	
+	@GetMapping("/api/appuser/logout")
+	public ResponseEntity<Void> logout(@CookieValue("SESSIONID") String sessionid){
+		this.sessionService.logout(sessionid);
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Set-Cookie", "SESSIONID=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;");
+		return ResponseEntity.ok().headers(headers).body(null);
+	}
+	
+	
 	
 	@GetMapping("/api/appuser")
 	public ResponseEntity<AppUser> getAppUserById(@RequestParam(name = "id", required = true) String appUserId) {
