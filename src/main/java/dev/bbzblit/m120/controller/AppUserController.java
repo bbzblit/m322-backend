@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import dev.bbzblit.m120.models.AppUser;
 import dev.bbzblit.m120.models.LoginModel;
@@ -51,7 +52,10 @@ public class AppUserController {
 	}
 	
 	@GetMapping("/api/appuser/relogin")
-	public ResponseEntity<AppUser> islogedin(@CookieValue("SESSIONID") String sessionid){
+	public ResponseEntity<AppUser> islogedin(@CookieValue( name ="SESSIONID", required = false) String sessionid){
+		if(sessionid == null) {
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You need to login");
+		}
 		return ResponseEntity.ok(this.sessionService.isLogedIn(sessionid));
 	}
 	

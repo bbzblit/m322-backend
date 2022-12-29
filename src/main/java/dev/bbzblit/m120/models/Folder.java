@@ -17,6 +17,7 @@ public class Folder {
 	
 	private String title;
 	
+	@DBRef
 	private List<Subject> subjects;
 	
 	@DBRef
