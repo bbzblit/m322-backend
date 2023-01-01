@@ -38,7 +38,7 @@ public class GradeController {
 		boolean found = false;
 
 		for (int i = 0; i < subjects.size(); i++) {
-			if (subjects.get(i).getId() == subjectId) {
+			if (subjects.get(i).getId().equals(subjectId)) {
 				folder.getSubjects().get(i).setGrade(grade);
 				found = true;
 			}
