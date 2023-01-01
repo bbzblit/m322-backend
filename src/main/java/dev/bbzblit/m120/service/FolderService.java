@@ -21,57 +21,57 @@ public class FolderService {
 
 	@Autowired
 	FolderRepository folderRepository;
-	
+
 	@Autowired
 	MongoTemplate mongoTemplate;
-	
+
 	public Folder saveFolder(Folder folder) {
-		
-		if(folder == null) {
+
+		if (folder == null) {
 			throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Folder has to be not null");
 		}
-		
+
 		return this.folderRepository.save(folder);
 	}
-	
+
 	public Folder getFolderById(String id) {
-		
+
 		Optional<Folder> folder = this.folderRepository.findById(id);
-		
-		if(folder.isEmpty()) {
+
+		if (folder.isEmpty()) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There doesnt exist a folder with the id" + id);
 		}
-		
+
 		return folder.get();
-		
-		
-		
+
 	}
 
 	public void deleteFolderById(String id) {
 
 		Optional<Folder> folder = this.folderRepository.findById(id);
-		
-		if(folder.isEmpty()) {
+
+		if (folder.isEmpty()) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There doesnt exist a folder with the id" + id);
 		}
-		
+
 		this.folderRepository.deleteById(id);
-		
+
 	}
-	
+
 	public Folder updateFolder(Folder folder) {
-		if(folder == null) {
+		if (folder == null) {
 			throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Folder doesnt have to be null");
 		}
-		
+
 		return this.folderRepository.save(folder);
 	}
 
 	public List<Folder> getFolderByAppUser(AppUser appUser) {
 		Query query = new Query();
-		query.addCriteria(Criteria.where("owner").is(appUser.getId()));
+		query.addCriteria(new Criteria().orOperator(Criteria.where("owner").is(appUser.getId()),
+				Criteria.where("viewAccess").in(appUser.getId()), Criteria.where("writeAccess").in(appUser.getId())));
+
 		return this.mongoTemplate.find(query, Folder.class);
 	}
-	
+
 }

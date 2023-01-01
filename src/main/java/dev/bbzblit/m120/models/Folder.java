@@ -17,16 +17,13 @@ public class Folder {
 	
 	private String title;
 	
-	@DBRef
 	private List<Subject> subjects;
 	
 	@DBRef
 	private AppUser owner; //Ref to AppUser
 	
-	@DBRef
-	private List<AppUser> viewAccess; //Ref to AppUser
+	private List<String> viewAccess; //Ref to appuser id with view access
 	
-	@DBRef
-	private List<AppUser> writeAccess; //Ref to AppUser
+	private List<String> writeAccess; //Ref to appuser id with write access
 	
 }
