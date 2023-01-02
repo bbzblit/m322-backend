@@ -13,10 +13,17 @@ import dev.bbzblit.m120.models.AppUser;
 public interface AppUserRepository extends MongoRepository<AppUser, String> {
 
 	@Query("{ password : ?0, email : ?1 }")
-	public Optional<AppUser> getByEmail(String password, String email);
+	public Optional<AppUser> getByEmailAndPassword(String password, String email);
 	
 
 	@Query("{ password : ?0, userName : ?1 }")
-	public Optional<AppUser> getByUsername(String password, String userName);
+	public Optional<AppUser> getByUsernameAndPassword(String password, String userName);
+	
+	@Query("{ email : ?0 }")
+	public Optional<AppUser> getByEmail(String email);
+	
+
+	@Query("{ userName : ?0 }")
+	public Optional<AppUser> getByUsername(String userName);
 	
 }

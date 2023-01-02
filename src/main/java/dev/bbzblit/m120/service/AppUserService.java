@@ -77,16 +77,16 @@ public class AppUserService {
 		return this.appUserRepository.save(appUser);
 	}
 	
-	public AppUser findByEmailOrUsername(LoginModel loginModel) {
+	public AppUser findByEmailOrUsernameAndPassword(LoginModel loginModel) {
 		
 		loginModel.setPassword(Hashing.sha256()
 				  .hashString(loginModel.getPassword() + salt, StandardCharsets.UTF_8)
 				  .toString());
 		
-		Optional<AppUser> optionalAppUser = this.appUserRepository.getByUsername(loginModel.getPassword(), loginModel.getUserNameOrEmail());
+		Optional<AppUser> optionalAppUser = this.appUserRepository.getByUsernameAndPassword(loginModel.getPassword(), loginModel.getUserNameOrEmail());
 		
 		if(optionalAppUser.isEmpty()) {
-			optionalAppUser = this.appUserRepository.getByEmail(loginModel.getPassword(), loginModel.getUserNameOrEmail());
+			optionalAppUser = this.appUserRepository.getByEmailAndPassword(loginModel.getPassword(), loginModel.getUserNameOrEmail());
 		}
 		
 		if(optionalAppUser.isEmpty()) {
@@ -101,5 +101,20 @@ public class AppUserService {
 		
 		return appUser;
 	}
-	
+public AppUser findByEmailOrUsername(String usernameOrEmail) {
+		
+		Optional<AppUser> optionalAppUser = this.appUserRepository.getByUsername(usernameOrEmail);
+		
+		if(optionalAppUser.isEmpty()) {
+			optionalAppUser = this.appUserRepository.getByEmail(usernameOrEmail);
+		}
+		
+		if(optionalAppUser.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No AppUser found with the email or username " + usernameOrEmail);
+		}
+		
+		AppUser appUser = optionalAppUser.get();
+		
+		return appUser;
+	}
 }

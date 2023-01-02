@@ -11,12 +11,10 @@ import lombok.Data;
 @Data
 public class Grade {
 
-	@Id
 	private String id = ObjectId.get().toHexString();
-	
+
 	private double weight;
-	
+
 	private double value;
-	
-	
+
 }

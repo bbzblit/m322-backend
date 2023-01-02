@@ -44,7 +44,7 @@ public class AppUserController {
 
 	@PostMapping("/api/appuser/login")
 	public ResponseEntity<AppUser> login(@RequestBody @Valid LoginModel loginModel){
-		AppUser appUser = this.appUserService.findByEmailOrUsername(loginModel);
+		AppUser appUser = this.appUserService.findByEmailOrUsernameAndPassword(loginModel);
 		String sessionId = this.sessionService.newSession(appUser);
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Set-Cookie", "SESSIONID=" + sessionId + "; Max-Age=604800; Path=/; Secure; HttpOnly");
@@ -83,5 +83,14 @@ public class AppUserController {
 	public ResponseEntity<AppUser> updateAppUser(@RequestBody @Valid AppUser appUser) {
 
 		return ResponseEntity.ok(this.appUserService.updateAppUser(appUser));
+	}
+	
+	@GetMapping("/api/appuser/getid")
+	public ResponseEntity<AppUser> getUserIdByEmailOrUsername(@RequestParam(name = "identifier", required = true) String usernameOrEmail){
+		
+		AppUser appUser = this.appUserService.findByEmailOrUsername(usernameOrEmail);
+		appUser.setFirstName(null);
+		appUser.setLastName(null);
+		return ResponseEntity.ok(appUser);
 	}
 }

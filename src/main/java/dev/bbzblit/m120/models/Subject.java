@@ -17,12 +17,11 @@ import lombok.Data;
 @Data
 public class Subject {
 
-	@Id
 	private String id = ObjectId.get().toHexString();
 
 	private String name;
 
-	private List<Grade> grades;
+	private List<Grade> grades = new ArrayList<Grade>();
 
 	@JsonIgnore
 	public void setGrade(Grade grade) {
@@ -31,5 +30,4 @@ public class Subject {
 		}
 		grades.add(grade);
 	}
-
 }
