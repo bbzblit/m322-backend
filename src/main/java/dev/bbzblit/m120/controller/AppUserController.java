@@ -71,7 +71,10 @@ public class AppUserController {
 	
 	@GetMapping("/api/appuser")
 	public ResponseEntity<AppUser> getAppUserById(@RequestParam(name = "id", required = true) String appUserId) {
-		return ResponseEntity.ok(this.appUserService.getAppUser(appUserId));
+		AppUser appUser = this.appUserService.getAppUser(appUserId);
+		appUser.setFirstName(null);
+		appUser.setLastName(null);
+		return ResponseEntity.ok(appUser);
 	}
 
 	@DeleteMapping("/api/appuser")
