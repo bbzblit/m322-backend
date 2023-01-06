@@ -9,6 +9,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
+import javax.validation.groups.Default;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.HashIndexed;
