@@ -22,6 +22,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import dev.bbzblit.m120.models.AppUser;
 import dev.bbzblit.m120.models.LoginModel;
+import dev.bbzblit.m120.models.PasswordReset;
+import dev.bbzblit.m120.models.PasswortResetFlow;
 import dev.bbzblit.m120.repository.AppUserRepository;
 import dev.bbzblit.m120.service.AppUserService;
 import dev.bbzblit.m120.service.SessionService;
@@ -80,12 +82,6 @@ public class AppUserController {
 		return ResponseEntity.ok(this.appUserService.deleteAppUser(appUserId));
 	}
 
-	@PutMapping("/api/appuser")
-	public ResponseEntity<AppUser> updateAppUser(@RequestBody @Valid AppUser appUser) {
-
-		return ResponseEntity.ok(this.appUserService.updateAppUser(appUser));
-	}
-
 	@GetMapping("/api/appuser/getid")
 	public ResponseEntity<AppUser> getUserIdByEmailOrUsername(
 			@RequestParam(name = "identifier", required = true) String usernameOrEmail) {
@@ -105,10 +101,23 @@ public class AppUserController {
 		}
 
 		AppUser appUser = this.appUserService.findByEmailOrUsername(email);
-		
+
 		this.appUserService.initPasswortReset(appUser);
 
 		return ResponseEntity.ok().build();
+	}
+
+	@PostMapping("/api/appuser/passwortreset")
+	public ResponseEntity<AppUser> resetPassword(@RequestBody PasswordReset passwordReset) {
+		
+		PasswortResetFlow flow =  this.appUserService.getPasswortResetFlowByOtp(passwordReset.getOtp());
+		
+		AppUser appUser = flow.getAppUser();
+		
+		appUser = this.appUserService.updatePassword(appUser, passwordReset.getPassword());
+		
+		return ResponseEntity.ok(appUser);
+
 	}
 
 }

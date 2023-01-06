@@ -89,14 +89,6 @@ public class AppUserService {
 		return null;
 	}
 
-	public AppUser updateAppUser(@Valid AppUser appUser) {
-
-		if (appUser == null) {
-			throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Appuser doesnt hae to be null");
-		}
-
-		return this.appUserRepository.save(appUser);
-	}
 
 	public AppUser findByEmailOrUsernameAndPassword(LoginModel loginModel) {
 
@@ -153,7 +145,7 @@ public class AppUserService {
         		this.url + "/reset/" + passwortResetFlow.getOtp() 
         		);
         try {
-        	emailSender.send(message);	
+        	emailSender.send(message);
         } catch (Exception e) {
         	throw new ResponseStatusException( HttpStatus.SERVICE_UNAVAILABLE,"Can't send mail pls try it later again");
         }
@@ -182,5 +174,26 @@ public class AppUserService {
 		this.passwortResetFlowRepository.save(passwortResetFlow);
 
 		return passwortResetFlow;
+	}
+	
+	public PasswortResetFlow getPasswortResetFlowByOtp(String otp) {
+		
+		PasswortResetFlow flow = this.passwortResetFlowRepository.findByOtp(otp);
+		
+		if( flow == null ) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Your password reset link is not valid");
+		}
+		
+		this.passwortResetFlowRepository.deleteById(flow.getId());
+		
+		return flow;
+		
+	}
+	
+	public AppUser updatePassword(AppUser appUser, String password) {
+		appUser.setPassword(
+				Hashing.sha256().hashString(password + salt, StandardCharsets.UTF_8).toString());
+
+		return this.appUserRepository.save(appUser);
 	}
 }
