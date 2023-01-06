@@ -1,4 +1,4 @@
-package dev.bbzblit.m120;
+package dev.bbzblit.m120.component;
 
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
