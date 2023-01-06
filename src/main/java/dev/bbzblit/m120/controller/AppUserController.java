@@ -78,11 +78,6 @@ public class AppUserController {
 		return ResponseEntity.ok(appUser);
 	}
 
-	@DeleteMapping("/api/appuser")
-	public ResponseEntity<Void> deleteAppUserById(@RequestParam(name = "id", required = true) String appUserId) {
-		return ResponseEntity.ok(this.appUserService.deleteAppUser(appUserId));
-	}
-
 	@GetMapping("/api/appuser/getid")
 	public ResponseEntity<AppUser> getUserIdByEmailOrUsername(
 			@RequestParam(name = "identifier", required = true) String usernameOrEmail) {
