@@ -47,7 +47,6 @@ public class SessionService {
 	private void deleteOldSession(AppUser appUser) {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("logedInAppUser._id").is(appUser.getId()));
-		System.out.println(this.mongoTemplate.find(query, Session.class));
 		this.mongoTemplate.findAllAndRemove(query, Session.class);
 	}
 	
