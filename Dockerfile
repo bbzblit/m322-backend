@@ -10,5 +10,5 @@ FROM openjdk:11-jdk
 WORKDIR /app
 COPY --from=builder /app/target/*.jar runner.jar
 EXPOSE 8080
-
-ENTRYPOINT ["java", "-jar", "runner.jar"]
+ENV MONGO_CONNECTION ""
+ENTRYPOINT ["java", "spring.data.mongodb.uri=mongodb://${MONGO_CONNECTION}/", "-jar", "runner.jar"]
