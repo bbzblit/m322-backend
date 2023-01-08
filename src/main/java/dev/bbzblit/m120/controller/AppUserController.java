@@ -39,7 +39,6 @@ public class AppUserController {
 
 	@PostMapping("/api/appuser/register")
 	public ResponseEntity<AppUser> register( @Valid @RequestBody  AppUser appUser) {
-		System.out.println("BBB");
 		appUser.setEmailVerified(true); // TODO: Remove if later implemented
 		appUser = this.appUserService.saveAppUser(appUser);
 		return ResponseEntity.status(HttpStatus.OK).body(appUser);

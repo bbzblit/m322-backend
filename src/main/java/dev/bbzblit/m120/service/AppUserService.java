@@ -66,7 +66,6 @@ public class AppUserService {
 	}
 
 	public AppUser saveAppUser(AppUser appUser) {
-		System.out.println(appUser.getPassword() + salt);
 		String hasedPasswd = Hashing.sha256().hashString(appUser.getPassword() + salt, StandardCharsets.UTF_8)
 				.toString();
 
