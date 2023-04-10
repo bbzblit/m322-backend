@@ -3,11 +3,13 @@ FROM maven:3 as builder
 
 WORKDIR /app
 COPY . .
-RUN mvn package
+RUN mvn package \
+    && useradd -ms /bin/bash -u 999 app
 
 FROM openjdk:11-jdk
 
-WORKDIR /app
+WORKDIR /home/app
+USER app
 COPY --from=builder /app/target/*.jar runner.jar
 EXPOSE 8080
 ENV MONGO_CONNECTION ""
